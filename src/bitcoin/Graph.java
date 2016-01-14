@@ -18,12 +18,12 @@ public class Graph {
 		 */
 		for(int i=1;i<=N;i++)
 		{
+			System.out.println("here");
 			createNode(i);
 		}
 		
 		System.out.println("--------Connected GRAPH Created------ with nodes "+N);
 		
-		System.out.println("Noofedges"+NoOfEdgesinGraph);
 		int count=0;
 		for(int i=1; i<NoOfEdgesinGraph-N+1;i++)
 		{
@@ -32,14 +32,17 @@ public class Graph {
 			Vertice V1 = vMap.get(v1);
 			Vertice V2 = vMap.get(v2);
 			System.out.println("Trying to connect "+v1+" to "+v2);
-			if(v1!=v2 && !V1.connectedVertices.contains(V2) && !V2.connectedVertices.contains(V1))
+			//if they are not same nodes
+			//if they are not already connected
+			// if the no of nodes they are connected is less than 8
+			if(v1!=v2 && !V1.connectedVertices.contains(V2) && !V2.connectedVertices.contains(V1)&& V1.connectedVertices.size()<8 && V2.connectedVertices.size()<8)
 			{
 				connectVertices(V1,V2);
 				count++;
 			}
 				
 		}
-		System.out.println("Graph created with "+N+" vertices and "+NoOfEdgesinGraph+" edges");
+		System.out.println("Graph created with "+ N +" vertices and "+ (count+N)+" edges");
 	}
 	
 	
@@ -60,13 +63,21 @@ public class Graph {
 			System.out.println("Random Vertice Selected is "+randomVerticeToConnecTo);
 			Vertice randomVertice= vMap.get(randomVerticeToConnecTo);
 			//connect NewVertice created to RandomVertice
+			if(randomVertice.connectedVertices.size()<8)
+			{
 			connectVertices(randomVertice, newVertice);
+			}
+			else
+			{
+				System.out.println("cant connect these nodes!! sorry");
+				createNode(i);
+			}
 		}
 		
 	}
 	
 	
-	public void connectVertices(Vertice v1, Vertice v2)
+	public void connectVertices(Vertice v1, Vertice v2) //for undirected graph if v1 is connected to v2, v2 is also connected to v1
 	{
 		v1.connectedVertices.add(v2);
 		v2.connectedVertices.add(v1);
@@ -90,7 +101,7 @@ public class Graph {
 	
 	public static void main(String[] args) {
 		int N=5000; //no of nodes in the graph
-		int NoOfEdgesinGraph= (N*(N-1))/20; // the maximum no of edges in the graph is n(n-1)/2
+		int NoOfEdgesinGraph= (N*(N-1))/200; // the maximum no of edges in the graph is n(n-1)/2
 		
 		Graph graph= new Graph();
 		graph.createGraph(N,NoOfEdgesinGraph);
