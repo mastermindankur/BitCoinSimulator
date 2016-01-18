@@ -3,6 +3,8 @@ package bitcoin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.sql.Timestamp;
+import java.util.Date;
 
 public class Graph {
 	
@@ -98,13 +100,19 @@ public class Graph {
 	    int randomNum = rand.nextInt((max - min) + 1) + min;
 	    return randomNum;
 	}
+		
 	
+		
 	public static void main(String[] args) {
 		int N=5000; //no of nodes in the graph
 		int NoOfEdgesinGraph= (N*(N-1))/200; // the maximum no of edges in the graph is n(n-1)/2
+		int NoOfRandomEvents =N/100;
 		
 		Graph graph= new Graph();
 		graph.createGraph(N,NoOfEdgesinGraph);
+		
+		System.out.println(" ------- Graph Created ------------");
+	
 	}
 
 }
