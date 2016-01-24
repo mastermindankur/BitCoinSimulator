@@ -107,8 +107,8 @@ public class Simulator {
 		System.out.println(" ----Random Events Created and added to the priority queue---");
 		
 		
-		//Transaction t= new Transaction();
-		//t.createRandomTransaction(N, graph);
+		Transaction t= new Transaction();
+		t.createRandomTransaction(N, graph);
 		
 	}
 
