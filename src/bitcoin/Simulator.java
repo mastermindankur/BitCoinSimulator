@@ -74,7 +74,6 @@ public class Simulator {
 	}
 		
 	
-
 	void createInitialEvents(int NoOfRandomEvents, int N) throws InterruptedException {
 		Random r=new Random();
 		int randnNode;
@@ -88,25 +87,29 @@ public class Simulator {
 			randnNode= randInt(1,N);
 			Thread.sleep(1);
 			queue.add(new Event(timestamp,eventType,randnNode,location));
-			System.out.println("event added for NODE= "+ randnNode + " in region " +location + " Event Type= "+ eventType + " Time Stamp="+ timestamp);		
+			System.out.println("event added for NODE= "+ randnNode + " in region " +location + " ,Event Type= "+ eventType + " ,Time Stamp="+ timestamp);		
 		}
 	}
 
 	
-	
+
 	public static void main(String[] args) throws InterruptedException {
-		int N=5000; //no of nodes in the graph
+		int N=4000; //no of nodes in the graph
 		int NoOfEdgesinGraph= (N*(N-1))/200; // the maximum no of edges in the graph is n(n-1)/2
 		int NoOfRandomEvents =N/100;
 		
 		Graph graph= new Graph();
 		graph.createGraph(N,NoOfEdgesinGraph);
-		
 		System.out.println(" ------- Graph Created ------------");
-	
+		
 		Simulator s= new Simulator();
 		s.createInitialEvents(NoOfRandomEvents, N);
-		System.out.println(" ----Random Events Created and added the priority queue---");
+		System.out.println(" ----Random Events Created and added to the priority queue---");
+		
+		
+		//Transaction t= new Transaction();
+		//t.createRandomTransaction(N, graph);
+		
 	}
 
 }
