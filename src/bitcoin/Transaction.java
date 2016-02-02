@@ -1,6 +1,8 @@
 package bitcoin;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.PriorityQueue;
 import java.util.Random;
 
 public class Transaction {
@@ -9,28 +11,29 @@ public class Transaction {
 	int to;
 	int milliBitCoins;
 		
-	public void createRandomTransaction(int N, Graph graph)
+	public Vertice createRandomTransaction(int N, Graph graph, Vertice vertice)
 	{
-		int v1= randInt(1, N);
 		int v2= randInt(1, N);
 		int coins= randInt(1,N);
-		this.from=v1;
+		this.from=vertice.data;
 		this.to=v2;
 		this.milliBitCoins=coins;
 		
 		System.out.println("Random Transaction created from Node "+ from+ " No of milliBitcoins to be sent "+milliBitCoins);
 		
-		Vertice V1 = graph.vMap.get(v1);
+		Vertice V1 = vertice;
 		Vertice V2 = graph.vMap.get(v2);
-		System.out.println(" inserting in to hashmap "+ this.hashCode()+ "to "+ V1.data);
+		System.out.println(" inserting in to hashmap "+ this.hashCode()+ " to "+ V1.data);
 		V1.hashCodesRecieved.put(this.hashCode(), true);
-		PropogateTransaction(V1);
-		System.out.println(" --------- PROPOGATION COMPLETE FOR TRANSACTION -----------");
+		System.out.println(" Transaction created");
+		return V1;
+		//PropogateTransaction(V1);
+		//System.out.println(" --------- PROPOGATION COMPLETE FOR TRANSACTION -----------");
 	}
 	
 
 	static int count=0;
-	public void PropogateTransaction(Vertice V1)
+	public Vertice PropogateTransaction(Vertice V1)
 	{	
 		for (Vertice temp : V1.connectedVertices) {
 			if(!temp.hashCodesRecieved.containsKey(this.hashCode()))// hash has not been recieved  before
@@ -40,9 +43,11 @@ public class Transaction {
 				//System.out.println(" inserting in to hashmap "+ this.hashCode()+ " for node "+ temp.data);
 				count++;
 				System.out.println("---------"+ count);
-				PropogateTransaction(temp);
+				return temp;
+				//PropogateTransaction(temp);
 			}
 		}
+		return null;
 		
 	}
 	

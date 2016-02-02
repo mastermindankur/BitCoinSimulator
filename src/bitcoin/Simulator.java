@@ -3,6 +3,7 @@ package bitcoin;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Random;
@@ -41,8 +42,7 @@ public class Simulator {
 	{
 		
 			List <String> differentEvents=new ArrayList<String>();
-			differentEvents.add("Create Transaction");
-			differentEvents.add("Forward Transaction");
+			differentEvents.add("CreateTx");
 			differentEvents.add("X");
 			differentEvents.add("Y");
 			differentEvents.add("Z");
@@ -74,9 +74,9 @@ public class Simulator {
 	}
 		
 	
-	void createInitialEvents(int NoOfRandomEvents, int N) throws InterruptedException {
+	void createInitialEvents(int NoOfRandomEvents, int N, Graph graph) throws InterruptedException {
 		Random r=new Random();
-		int randnNode;
+		int randNode;
 	
 		for(int i=0;i<NoOfRandomEvents;i++)
 		{
@@ -84,11 +84,52 @@ public class Simulator {
 			long  timestamp= java.lang.System.currentTimeMillis();
 			String eventType= getRandomEventType();
 			String location=NodeLocation();
-			randnNode= randInt(1,N);
+			randNode= randInt(1,N);
 			Thread.sleep(1);
-			queue.add(new Event(timestamp,eventType,randnNode,location));
-			System.out.println("event added for NODE= "+ randnNode + " in region " +location + " ,Event Type= "+ eventType + " ,Time Stamp="+ timestamp);		
+			queue.add(new Event(timestamp ,eventType ,graph.vMap.get(randNode),location,null));
+			System.out.println("event added for NODE= "+ randNode + " in region " +location + ", Event Type= "+ eventType + " ,Time Stamp="+ timestamp);		
+			Thread.sleep(200);
 		}
+	}
+	
+	public void runSimulation(int N, Graph graph) throws InterruptedException
+	{
+		  while (!queue.isEmpty())
+			{
+			  	Event event = queue.poll();
+			  	//Thread.sleep(200);
+			  	System.out.println("***** am reading priority queue *******");
+			  	switch(event.eventType)
+			  	{
+				  	case "CreateTx":
+				  	{	
+				  		Transaction t= new Transaction();
+						Vertice V1= t.createRandomTransaction(N,graph,event.vertice);
+						long  timestamp= java.lang.System.currentTimeMillis();
+						// Added to the queue Forward Transaction
+						System.out.println(" Forward Tx added to the queue to vertice "+V1.data);
+						queue.add(new Event(timestamp,"ForwardTx1",V1, event.location, t));
+						//System.out.println(t);
+				  	}
+				  	break;
+			  	
+				  	case "ForwardTx1":
+				  	{
+				  		System.out.println("Inside Switch Case Forwarding Transacton");
+				  		Vertice V1= event.transaction.PropogateTransaction(event.vertice);
+				  		if(V1!=null)
+				  		{
+				  		 long  timestamp= java.lang.System.currentTimeMillis();
+				  		 System.out.println(" Forward Tx added to the queue for "+V1.data);
+				  		 queue.add(new Event(timestamp,"ForwardTx1",V1,event.location,event.transaction));
+				  		}
+				  	}
+				  	break;
+			  	}
+			}
+		  
+		  System.out.println("Priority Queue got empty");
+		  
 	}
 
 	
@@ -103,12 +144,12 @@ public class Simulator {
 		System.out.println(" ------- Graph Created ------------");
 		
 		Simulator s= new Simulator();
-		s.createInitialEvents(NoOfRandomEvents, N);
+		s.createInitialEvents(NoOfRandomEvents, N, graph);
 		System.out.println(" ----Random Events Created and added to the priority queue---");
 		
+		s.runSimulation(N,graph);
 		
-		Transaction t= new Transaction();
-		t.createRandomTransaction(N, graph);
+	
 		
 	}
 

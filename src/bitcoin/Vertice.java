@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Vertice {
-
+	
 	int  data;
 	ArrayList <Vertice> connectedVertices = new ArrayList <Vertice>();
 	
