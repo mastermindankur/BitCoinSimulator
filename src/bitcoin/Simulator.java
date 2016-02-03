@@ -44,9 +44,9 @@ public class Simulator {
 		
 			List <String> differentEvents=new ArrayList<String>();
 			differentEvents.add("CreateTx");
-			differentEvents.add("X");
-			differentEvents.add("Y");
-			differentEvents.add("Z");
+			differentEvents.add("AddNode");
+			differentEvents.add("RemoveNode");
+			//differentEvents.add("Z");
 			//m.add("France");
 			//m.add("do nothing");
 			Simulator obj=new Simulator();
@@ -129,6 +129,23 @@ public class Simulator {
 				  		}
 				  	}
 				  	break;
+				  	
+				  	
+				  	case "AddNode":
+				  	{
+				  		System.out.println("Adding Node to the Graph");
+				  		N= N+1;
+				  		graph.createNode(N);
+				  	}
+				  	break;
+				  	
+					case "RemoveNode":
+				  	{
+				  		System.out.println("Removing Node to the Graph");
+				  		graph.removeRandomNode(N);
+				  	}
+				  	break;
+			  	
 			  	}
 			}
 		  

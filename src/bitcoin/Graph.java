@@ -78,6 +78,28 @@ public class Graph {
 		
 	}
 	
+	void removeRandomNode(int N)
+	{
+		int randomVertice= randInt(1,N);
+		System.out.println(" The random vertice that needs to be removed is "+randomVertice);
+		Vertice V= vMap.get(randomVertice);
+		
+		//people who are connected to me, update their Adjacency list
+		for (Vertice neighbour : V.connectedVertices) {
+			System.out.println("Removing the link between "+neighbour.data +" and "+ V.data);
+			neighbour.connectedVertices.remove(V); //removing the connection
+		}
+		
+		Vertice neighbour1= V.connectedVertices.get(0);
+		Vertice neightbour2= V.connectedVertices.get(1);
+
+		if(neighbour1!=null && neighbour1.connectedVertices.size()<8 && neightbour2!=null && neightbour2.connectedVertices.size()<8)
+		{
+		 connectVertices(neighbour1, neightbour2);	
+		}
+		vMap.remove(V);
+	}
+	
 	
 	public void connectVertices(Vertice v1, Vertice v2) //for undirected graph if v1 is connected to v2, v2 is also connected to v1
 	{
@@ -112,6 +134,8 @@ public class Graph {
 		graph.createGraph(N,NoOfEdgesinGraph);
 		
 		System.out.println(" ------- Graph Created ------------");
+		
+		graph.removeRandomNode(N);
 	
 	}
 
