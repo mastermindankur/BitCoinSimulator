@@ -10,14 +10,17 @@ public class Transaction {
 	int from;
 	int to;
 	int milliBitCoins;
+	long birthTime;
+	long lastUpdated;
 		
-	public Vertice createRandomTransaction(int N, Graph graph, Vertice vertice)
+	public Vertice createTransaction(int N, Graph graph, Vertice vertice, long birthTime)
 	{
 		int v2= randInt(1, N);
 		int coins= randInt(1,N);
 		this.from=vertice.data;
 		this.to=v2;
 		this.milliBitCoins=coins;
+		this.birthTime=birthTime;
 		
 		System.out.println("Random Transaction created from Node "+ from+ " No of milliBitcoins to be sent "+milliBitCoins);
 		

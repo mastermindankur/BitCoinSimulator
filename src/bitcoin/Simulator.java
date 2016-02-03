@@ -10,6 +10,7 @@ import java.util.Random;
 
 public class Simulator {
 
+	ArrayList <Transaction> transactionList = new ArrayList <Transaction>();
 	// the priority queue - the comparator is used to look at the event times and put them in order
 	// the priority queue - the comparator is used to look at the event times and put them in order
 	PriorityQueue<Event> queue = new PriorityQueue<>(new Comparator<Event>() {
@@ -104,8 +105,9 @@ public class Simulator {
 				  	case "CreateTx":
 				  	{	
 				  		Transaction t= new Transaction();
-						Vertice V1= t.createRandomTransaction(N,graph,event.vertice);
-						long  timestamp= java.lang.System.currentTimeMillis();
+				  		transactionList.add(t); //adding to the list of transactions
+				  		long  timestamp= java.lang.System.currentTimeMillis();
+						Vertice V1= t.createTransaction(N,graph,event.vertice,timestamp);
 						// Added to the queue Forward Transaction
 						System.out.println(" Forward Tx added to the queue to vertice "+V1.data);
 						queue.add(new Event(timestamp,"ForwardTx1",V1, event.location, t));
@@ -116,7 +118,9 @@ public class Simulator {
 				  	case "ForwardTx1":
 				  	{
 				  		System.out.println("Inside Switch Case Forwarding Transacton");
-				  		Vertice V1= event.transaction.PropogateTransaction(event.vertice);
+				  		Transaction t=event.transaction;
+				  		Vertice V1= t.PropogateTransaction(event.vertice);
+				  		t.lastUpdated=java.lang.System.currentTimeMillis();
 				  		if(V1!=null)
 				  		{
 				  		 long  timestamp= java.lang.System.currentTimeMillis();
@@ -130,6 +134,15 @@ public class Simulator {
 		  
 		  System.out.println("Priority Queue got empty");
 		  
+		  System.out.println("Propogation Delay for");
+		  int i=0;
+		  for (Transaction t : transactionList) {
+			  System.out.println(" Transaction "+i);
+			  System.out.println(" The birthtime for Transaction "+t.birthTime );
+			  System.out.println(" The lastUpdated Time for Transaction "+t.lastUpdated );
+			  System.out.println("The propogation delay is >>>"+ (t.lastUpdated-t.birthTime));
+			  i++;
+		  }
 	}
 
 	
